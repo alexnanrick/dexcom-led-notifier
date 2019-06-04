@@ -1,0 +1,9 @@
+*.pyc
+*.png
+
+*.env
+
+venv/
+migrations/
+
+*.idea
