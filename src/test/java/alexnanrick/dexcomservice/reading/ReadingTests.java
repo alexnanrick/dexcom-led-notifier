@@ -2,14 +2,15 @@ package alexnanrick.dexcomservice.reading;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ReadingTests {
+class ReadingTests {
 
     @Test
-    public void glucoseValueShouldReturnCorrectMmolValue() {
-        Reading reading = new Reading();
-        reading.setGlucoseValue(180);
+    void glucoseValueShouldReturnCorrectMmolValue() {
+        Reading reading = new Reading(180, LocalDateTime.now(), 4);
         assertEquals(10, reading.getGlucoseValueAsMmol());
     }
 

@@ -1,29 +1,46 @@
 package alexnanrick.dexcomservice.reading;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
+@Slf4j
 @Component
 public class NightscoutClient {
 
     @Value("${nightscout.api}")
     private String nightscoutApiBaseUrl;
 
+    private final RestTemplate restTemplate;
+
     private static final String ENTRIES_TEMPLATE = "/entries";
 
-    public Reading getLatestReading() throws NoReadingFoundException {
+    public NightscoutClient(RestTemplateBuilder restTemplateBuilder) {
+        restTemplate = restTemplateBuilder.build();
+    }
+
+    List<Reading> getReadings(Integer count) throws NoReadingFoundException {
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(nightscoutApiBaseUrl + ENTRIES_TEMPLATE);
-        uriComponentsBuilder.queryParam("count", 1);
+        uriComponentsBuilder.queryParam("count", count);
 
-        RestTemplate restTemplate = new RestTemplate();
-        Reading[] readingList = restTemplate.getForObject(uriComponentsBuilder.toUriString(), Reading[].class);
+        ResponseEntity<List<Reading>> responseEntity = restTemplate.exchange(uriComponentsBuilder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<Reading>>() {});
 
-        if (readingList == null)
-            throw new NoReadingFoundException("No entry returned from Nightscout");
+        List<Reading> readings = responseEntity.getBody();
 
-        return readingList[0];
+        if (readings == null || readings.size() == 0)
+            throw new NoReadingFoundException("No readings found");
+
+        log.info(String.format("getReadings got [readings list size: %s]", readings.size()));
+
+        return readings;
     }
 
 }
