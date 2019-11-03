@@ -12,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-@Slf4j
 @Component
 public class NightscoutClient {
 
@@ -37,8 +36,6 @@ public class NightscoutClient {
 
         if (readings == null || readings.size() == 0)
             throw new NoReadingFoundException("No readings found");
-
-        log.info(String.format("getReadings got [readings list size: %s]", readings.size()));
 
         return readings;
     }

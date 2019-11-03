@@ -1,32 +1,52 @@
 package alexnanrick.dexcomservice.reading;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Reading {
 
     private static final int MMOL_CONVERSION = 18;
 
+    Reading(int glucoseValue, LocalDateTime time, int trendCode) {
+        this.glucoseValue = glucoseValue;
+        this.time = time;
+        this.trendCode = trendCode;
+    }
+
     @JsonProperty("sgv")
     private int glucoseValue;
 
     @JsonProperty("dateString")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime time;
 
     @JsonProperty("trend")
     private int trendCode;
 
-    public float getGlucoseValueAsMmol() {
-        return (float)this.glucoseValue/MMOL_CONVERSION;
+    @JsonProperty("glucoseValueAsMmol")
+    private BigDecimal glucoseValueMmol;
+
+    BigDecimal getGlucoseValueMmol() {
+        if (this.glucoseValueMmol == null)
+            calculateGlucoseValueMmol();
+
+        return this.glucoseValueMmol;
+    }
+
+    Reading calculateGlucoseValueMmol() {
+        BigDecimal glucoseValueMgdl = BigDecimal.valueOf(this.glucoseValue);
+        BigDecimal divisor = BigDecimal.valueOf(18);
+        this.setGlucoseValueMmol(glucoseValueMgdl.divide(divisor, 1, RoundingMode.DOWN));
+        return this;
     }
 
 }
