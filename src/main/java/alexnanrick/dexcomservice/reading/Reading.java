@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Reading {
 
+    private static final int MMOL_CONVERSION = 18;
+
     @JsonProperty("sgv")
     private int glucoseValue;
 
@@ -20,5 +22,9 @@ public class Reading {
 
     @JsonProperty("trend")
     private int trendCode;
+
+    public float getGlucoseValueAsMmol() {
+        return (float)this.glucoseValue/MMOL_CONVERSION;
+    }
 
 }
