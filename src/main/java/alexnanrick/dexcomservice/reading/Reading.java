@@ -44,7 +44,7 @@ class Reading {
 
     Reading calculateGlucoseValueMmol() {
         BigDecimal glucoseValueMgdl = BigDecimal.valueOf(this.glucoseValue);
-        BigDecimal divisor = BigDecimal.valueOf(18);
+        BigDecimal divisor = BigDecimal.valueOf(MMOL_CONVERSION);
         this.setGlucoseValueMmol(glucoseValueMgdl.divide(divisor, 1, RoundingMode.DOWN));
         return this;
     }
