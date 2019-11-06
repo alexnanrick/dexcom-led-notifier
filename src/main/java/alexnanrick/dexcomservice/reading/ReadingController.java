@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/readings")
+@RequestMapping("/api/readings")
 public class ReadingController {
 
     private final ReadingService readingService;
