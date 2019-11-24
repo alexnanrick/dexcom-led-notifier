@@ -32,3 +32,4 @@ build/
 
 ### Dev Properties ###
 /src/main/resources/application-dev.properties
+/src/main/lib/

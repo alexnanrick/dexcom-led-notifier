@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @SpringBootApplication(exclude={MongoAutoConfiguration.class})
 public class DexcomServiceApplication {
 
-	@RequestMapping("/")
-	@ResponseBody
-	String home() {
-		return "Dexcom Service Home...";
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(DexcomServiceApplication.class, args);
 	}

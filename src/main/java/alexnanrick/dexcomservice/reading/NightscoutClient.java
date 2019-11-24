@@ -19,7 +19,7 @@ public class NightscoutClient {
 
     private final RestTemplate restTemplate;
 
-    private static final String ENTRIES_TEMPLATE = "/entries";
+    private static final String ENTRIES_TEMPLATE = "/entries.json";
 
     public NightscoutClient(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
