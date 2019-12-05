@@ -1,0 +1,8 @@
+nightscout:
+  api: ${NIGHTSCOUT_API}
+
+spring:
+  security:
+    user:
+      name: ${SPRING_SECURITY_USERNAME}
+      password: ${SPRING_SECURITY_PASSWORD}
